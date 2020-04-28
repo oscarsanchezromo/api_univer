@@ -12,31 +12,31 @@ class Alumnos:
 	def GET(self):
 		try:
 			datos=web.input()
-			if datos['token']=="1234": #revisa que el token este bien
-				#PARA EL GET
+			if datos['token']=="1234": 
+				
 				if datos['action']=="get": 
 					resultAB=self.actionGet(self.version,self.file)
-					return json.dumps(resultAB) #devuelve el resultAado del metodo
-				#PARA EL SEARCH
+					return json.dumps(resultAB) 
+				
 				elif datos['action']=="search":
 					matricula=datos['matricula']
 					resultAB=self.actionSearch(self.version,self.file,matricula)
-					return json.dumps(resultAB) #devuelve el resultAado del metodo
-				#PARA INPUT(INSERTAR VALORES)
-				elif datos['action']=="put": #funciona para insertar los valores y se especifican
+					return json.dumps(resultAB) 
+				
+				elif datos['action']=="put": #insertar
 					matricula=datos['matricula']
 					nombre=datos['nombre']
 					primer_apellido=datos['apellido1']
 					segundo_apellido=datos['apellido2']
 					carrera=datos['carrera']
 					resultAB=self.actionInput(self.version,self.file,matricula,nombre,primer_apellido,segundo_apellido,carrera)
-					return json.dumps(resultAB)#devuelve el resultAado del metodo
-				#PARA ELIMINAR VALORES
+					return json.dumps(resultAB)#
+				
 				elif datos['action']=="delete":
 					matricula=datos['matricula']
 					resultAB=self.actionDelete(self.version,self.file,matricula)
-					return json.dumps(resultAB) #devuelve el resultAado del metodo
-				else: #POR SI EL COMANDO ESTA MAL
+					return json.dumps(resultAB) 
+				else: 
 					resultAB={}
 					resultAB['status']="Command not match, try again"
 					return json.dumps(resultAB)
@@ -49,66 +49,66 @@ class Alumnos:
 			resultA['status']="Ingresa valores validos, revisa"
 			return json.dumps(resultA)
 
-#METODO PARA LA FUNCION GET
+#GET
 	@staticmethod
 	def actionGet(version,file):
 		try:
 				resultA=[]
 				resultAB={}
-				with open('static/csv/alumnos.csv','r') as csvfile: #para abrir el archivo csv
+				with open('static/csv/alumnos.csv','r') as csvfile: #csv
 					reader = csv.DictReader(csvfile)
-					for row in reader: #para recorrer los datos del archivo
+					for row in reader: 
 						resultA.append(row)
 						resultAB['version']=version
-						resultAB['status']="200 ok" #indica que todo salio bien
+						resultAB['status']="200 ok" 
 						resultAB['alumnos']=resultA
 				return resultAB 
-		except Exception as e: #Por si algo sale mal
+		except Exception as e: 
 			resultA={}
 			resultA['version']=version
 			resultA['status']="Error"
 			return json.dumps(resultA)
 	
-#METODO PARA LA FUNCION SEARCH
+#SEARCH
 	@staticmethod
 	def actionSearch(version,file,matricula):
 		try:
 				resultA=[]
 				resultAB={}
-				with open('static/csv/alumnos.csv','r') as csvfile: #para abrir el archivo csv
+				with open('static/csv/alumnos.csv','r') as csvfile: 
 					reader = csv.DictReader(csvfile)
 					for row in reader:
-						if(matricula==row['matricula']): #compara la matricula ingresada con los datos del csv
+						if(matricula==row['matricula']): 
 							print(matricula)
-							resultA.append(row) #devuelve los datos si encuentra una coincidencia
+							resultA.append(row) 
 							resultAB['version']=version
-							resultAB['status']="200 ok"#por si todo sale bien
+							resultAB['status']="200 ok"
 							resultAB['alumnos']=resultA
 							break
 						else:
 							resultAB={}
-							resultAB['status']="matricula no encontrada" #por si no se encuentra 
+							resultAB['status']="matricula no encontrada" 
 				return resultAB 
-		except Exception as e: #Por si algo sale mal
+		except Exception as e: 
 			resultA={}
 			resultA['version']=version
 			resultA['status']="Error"
 			return json.dumps(resultA)
 
 
-#METODO PARA LA FUNCION DE INPUT
+#INPUT
 	@staticmethod
 	def actionInput(version,file,matricula,nombre,primer_apellido,segundo_apellido,carrera):
 		try:
 			resultA=[]
-			resultAIN=[] #lista que sirve para que los datos introducidos vayan cayendo ahi
+			resultAIN=[]
 			resultAB={}
 			resultAIN.append(matricula)
 			resultAIN.append(nombre)
 			resultAIN.append(primer_apellido)
 			resultAIN.append(segundo_apellido)
 			resultAIN.append(carrera)
-			with open('static/csv/alumnos.csv','a',newline='') as csvfile: #para abrir el archivo csv
+			with open('static/csv/alumnos.csv','a',newline='') as csvfile: 
 				writer=csv.writer(csvfile)
 				# The writerow() method writes a row of data into the specified file
 				writer.writerow(resultAIN)
@@ -117,11 +117,11 @@ class Alumnos:
 				for row in reader:
 					resultA.append(row)
 					resultAB['version']=version
-					resultAB['status']="200 ok" #si todo sale bien
+					resultAB['status']="200 ok" 
 					resultAB['alumnos']=resultA
 			return resultAB 
 		except Exception as e:
-			resultA={} #si algo falla
+			resultA={} 
 			resultA['version']=version
 			resultA['status']="Error"
 			return json.dumps(resultA)
